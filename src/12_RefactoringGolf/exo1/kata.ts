@@ -6,6 +6,13 @@ export class Game {
   private _toto: Board = new Board();
 
   public Play(symbol: string, x: number, y: number): void {
+    this.validateFirstMove(symbol);
+    this.validatePlayerTurn(symbol);
+    this.validatePosition(x, y);
+    this.updateGameState(symbol, x, y);
+  }
+
+  private validateFirstMove(symbol: string): void {
     //if first move
     if (this._lastSymbol == " ") {
       //if player is X
@@ -13,16 +20,26 @@ export class Game {
         throw new Error("Invalid first player");
       }
     }
+  }
+    
+
+  private validatePlayerTurn(symbol: string): void {
     //if not first move but player repeated
-    else if (symbol == this._lastSymbol) {
+    if (this._lastSymbol != " " && symbol == this._lastSymbol) {
       throw new Error("Invalid next player");
     }
+  }
+
+  private validatePosition(x: number, y: number): void {
     //if not first move but play on an already played tile
-    else if (this._toto.TileAt(x, y).Symbol != " ") {
+    if (this._lastSymbol != " " && this._toto.TileAt(x, y).Symbol != " ") {
       throw new Error("Invalid position");
     }
+  }
+
 
     // update game state
+  private updateGameState(symbol: string, x: number, y: number): void {
     this._lastSymbol = symbol;
     this._toto.AddTileAt(symbol, x, y);
   }
