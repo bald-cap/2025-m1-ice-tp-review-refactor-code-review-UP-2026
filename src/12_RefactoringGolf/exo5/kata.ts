@@ -56,10 +56,20 @@ export class Game {
   }
 }
 
-interface Tile {
-  X: number;
-  Y: number;
-  Symbol: string;
+class Tile {
+  private _x: number;
+  private _y: number;
+  private _symbol: string;
+
+  constructor( x: number, y: number, symbol : string){
+    this._x = x;
+    this._y = y;
+    this._symbol = symbol;
+  }
+
+  public public hasSameSymbol(symbol : string): boolean {
+    return this._symbol == symbol;
+  }
 }
 
 class Board {
@@ -81,6 +91,7 @@ class Board {
   public AddTileAt(symbol: string, x: number, y: number): void {
     this._plays.find((t: Tile) => t.X == x && t.Y == y)!.Symbol = symbol;
   }
+
 
   public findRowFullWithSamePlayer(): string {
     if (this.isRowFull(firstRow) && this.isRowFullWithSameSymbol(firstRow)) {
