@@ -1,15 +1,11 @@
 /* eslint-disable */
 
 export class Game {
-  private _lastSymbol = " ";
+  private readonly emptyPlay = " ";
+  
+  private _lastSymbol = this.emptyPlay;
   private _board: Board = new Board();
 
-  private readonly playerO = "O";
-  private readonly emptyPlay = " ";
-
-  private readonly firstRow = 0;
-  private readonly secondRow = 1;
-  private readonly thirdRow = 2;
   private readonly firstColumn = 0;
   private readonly secondColumn = 1;
   private readonly thirdColumn = 2;
@@ -24,8 +20,9 @@ export class Game {
   }
 
   private validateFirstMove(player: string) {
+    const playerO = "O";
     if (this._lastSymbol == this.emptyPlay) {
-      if (player == this.playerO) {
+      if (player == playerO) {
         throw new Error("Invalid first player");
       }
     }
@@ -52,16 +49,20 @@ export class Game {
   }
 
   public Winner(): string {
-    if (this.isRowFull(this.firstRow) && this.isRowFullWithSameSymbol(this.firstRow)) {
-      return this._board.TileAt(this.firstRow, this.firstColumn)!.Symbol;
+    const firstRow = 0;
+    const secondRow = 1;
+    const thirdRow = 2;
+
+    if (this.isRowFull(firstRow) && this.isRowFullWithSameSymbol(firstRow)) {
+      return this._board.TileAt(firstRow, this.firstColumn)!.Symbol;
     }
 
-    if (this.isRowFull(this.secondRow) && this.isRowFullWithSameSymbol(this.secondRow)) {
-      return this._board.TileAt(this.secondRow, this.firstColumn)!.Symbol;
+    if (this.isRowFull(secondRow) && this.isRowFullWithSameSymbol(secondRow)) {
+      return this._board.TileAt(secondRow, this.firstColumn)!.Symbol;
     }
 
-    if (this.isRowFull(this.thirdRow) && this.isRowFullWithSameSymbol(this.thirdRow)) {
-      return this._board.TileAt(this.thirdRow, this.firstColumn)!.Symbol;
+    if (this.isRowFull(thirdRow) && this.isRowFullWithSameSymbol(thirdRow)) {
+      return this._board.TileAt(thirdRow, this.firstColumn)!.Symbol;
     }
 
     return this.emptyPlay;
