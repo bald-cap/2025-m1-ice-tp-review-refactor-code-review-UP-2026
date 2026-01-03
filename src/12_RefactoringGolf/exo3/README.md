@@ -1,6 +1,5 @@
 # Exo 3
 
-
 ## Refactorings
 
 - REVUE DE CODE: identify magic strings and numbers
