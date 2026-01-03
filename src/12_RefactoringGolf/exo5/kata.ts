@@ -38,7 +38,8 @@ export class Game {
   }
 
   private validatePositionIsEmpty(x: number, y: number) {
-    if (this._board.TileAt(x, y).symbol != emptyPlay) {
+    const currentTile = this._board.TileAt(x, y)
+    if (!currentTile.hasSameSymbol(emptyPlay)) {
       throw new Error("Invalid position");
     }
   }
@@ -122,40 +123,47 @@ class Board {
   }
 
   public AddTileAt(symbol: string, x: number, y: number): void {
-    this._plays.find((t: Tile) => t.x == x && t.y == y)!.symbol = symbol;
+    this.TileAt(x, y)!.symbol = symbol;
   }
 
 
   public findRowFullWithSamePlayer(): string {
+    const tileA = this.TileAt(firstRow, firstColumn)
+    const tileB = this.TileAt(secondRow, firstColumn)
+    const tileC = this.TileAt(thirdRow, firstColumn)
     if (this.isRowFull(firstRow) && this.isRowFullWithSameSymbol(firstRow)) {
-      return this.TileAt(firstRow, firstColumn)!.symbol;
+      return tileA!.symbol;
     }
 
     if (this.isRowFull(secondRow) && this.isRowFullWithSameSymbol(secondRow)) {
-      return this.TileAt(secondRow, firstColumn)!.symbol;
+      return tileB!.symbol;
     }
 
     if (this.isRowFull(thirdRow) && this.isRowFullWithSameSymbol(thirdRow)) {
-      return this.TileAt(thirdRow, firstColumn)!.symbol;
+      return tileC!.symbol;
     }
 
     return emptyPlay;
   }
 
   private isRowFull(row: number) {
+    const tileA = this.TileAt(row, firstColumn)
+    const tileB = this.TileAt(row, secondColumn)
+    const tileC = this.TileAt(row, thirdColumn)
     return (
-      this.TileAt(row, firstColumn)!.symbol != emptyPlay &&
-      this.TileAt(row, secondColumn)!.symbol != emptyPlay &&
-      this.TileAt(row, thirdColumn)!.symbol != emptyPlay
+      !tileA.isEmpty() &&
+      !tileB.isEmpty() &&
+      !tileC.isEmpty()
     );
   }
 
   private isRowFullWithSameSymbol(row: number) {
+    const tileA = this.TileAt(row, firstColumn)
+    const tileB = this.TileAt(row, secondColumn)
+    const tileC = this.TileAt(row, thirdColumn)
     return (
-      this.TileAt(row, firstColumn)!.symbol ==
-        this.TileAt(row, secondColumn)!.symbol &&
-      this.TileAt(row, thirdColumn)!.symbol ==
-        this.TileAt(row, secondColumn)!.symbol
+      tileA.hasSameSymbol(tileB) &&
+      tileA.hasSameSymbol(tileC)
     );
   }
 }
