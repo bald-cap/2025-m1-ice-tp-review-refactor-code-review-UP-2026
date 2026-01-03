@@ -21,7 +21,6 @@ export class Game {
       }
     }
   }
-    
 
   private validatePlayerTurn(symbol: string): void {
     //if not first move but player repeated
@@ -37,8 +36,7 @@ export class Game {
     }
   }
 
-
-    // update game state
+  // update game state
   private updateGameState(symbol: string, x: number, y: number): void {
     this._lastSymbol = symbol;
     this._toto.AddTileAt(symbol, x, y);
@@ -46,51 +44,75 @@ export class Game {
 
   public Winner(): string {
     //if the positions in first row are taken
-    if (
-      this._toto.TileAt(0, 0)!.Symbol != " " &&
-      this._toto.TileAt(0, 1)!.Symbol != " " &&
-      this._toto.TileAt(0, 2)!.Symbol != " "
-    ) {
+    if (this.isFirstRowFull()) {
       //if first row is full with same symbol
-      if (
-        this._toto.TileAt(0, 0)!.Symbol == this._toto.TileAt(0, 1)!.Symbol &&
-        this._toto.TileAt(0, 2)!.Symbol == this._toto.TileAt(0, 1)!.Symbol
-      ) {
+      if (this.isFirstRowFullWithSameSymbol()) {
         return this._toto.TileAt(0, 0)!.Symbol;
       }
     }
 
     //if the positions in 2nd row are taken
-    if (
-      this._toto.TileAt(1, 0)!.Symbol != " " &&
-      this._toto.TileAt(1, 1)!.Symbol != " " &&
-      this._toto.TileAt(1, 2)!.Symbol != " "
-    ) {
+    if (this.isSecondRowFull()) {
       //if middle row is full with same symbol
-      if (
-        this._toto.TileAt(1, 0)!.Symbol == this._toto.TileAt(1, 1)!.Symbol &&
-        this._toto.TileAt(1, 2)!.Symbol == this._toto.TileAt(1, 1)!.Symbol
-      ) {
+      if (this.isSecondRowFullWithSameSymbol()) {
         return this._toto.TileAt(1, 0)!.Symbol;
       }
     }
 
-    //if the positions in 2nd row are taken
-    if (
-      this._toto.TileAt(2, 0)!.Symbol != " " &&
-      this._toto.TileAt(2, 1)!.Symbol != " " &&
-      this._toto.TileAt(2, 2)!.Symbol != " "
-    ) {
-      //if middle row is full with same symbol
-      if (
-        this._toto.TileAt(2, 0)!.Symbol == this._toto.TileAt(2, 1)!.Symbol &&
-        this._toto.TileAt(2, 2)!.Symbol == this._toto.TileAt(2, 1)!.Symbol
-      ) {
+    //if the positions in 3rd row are taken
+    if (this.isThirdRowFull()) {
+      //if bottom row is full with same symbol
+      if (this.isThirdRowFullWithSameSymbol()) {
         return this._toto.TileAt(2, 0)!.Symbol;
       }
     }
 
     return " ";
+  }
+
+  private isFirstRowFull() {
+    return (
+      this._toto.TileAt(0, 0)!.Symbol != " " &&
+      this._toto.TileAt(0, 1)!.Symbol != " " &&
+      this._toto.TileAt(0, 2)!.Symbol != " "
+    );
+  }
+
+  private isFirstRowFullWithSameSymbol() {
+    return (
+      this._toto.TileAt(0, 0)!.Symbol == this._toto.TileAt(0, 1)!.Symbol &&
+      this._toto.TileAt(0, 2)!.Symbol == this._toto.TileAt(0, 1)!.Symbol
+    );
+  }
+
+  private isSecondRowFull() {
+    return (
+      this._toto.TileAt(1, 0)!.Symbol != " " &&
+      this._toto.TileAt(1, 1)!.Symbol != " " &&
+      this._toto.TileAt(1, 2)!.Symbol != " "
+    );
+  }
+
+  private isSecondRowFullWithSameSymbol() {
+    return (
+      this._toto.TileAt(1, 0)!.Symbol == this._toto.TileAt(1, 1)!.Symbol &&
+      this._toto.TileAt(1, 2)!.Symbol == this._toto.TileAt(1, 1)!.Symbol
+    );
+  }
+
+  private isThirdRowFull() {
+    return (
+      this._toto.TileAt(2, 0)!.Symbol != " " &&
+      this._toto.TileAt(2, 1)!.Symbol != " " &&
+      this._toto.TileAt(2, 2)!.Symbol != " "
+    );
+  }
+
+  private isThirdRowFullWithSameSymbol() {
+    return (
+      this._toto.TileAt(2, 0)!.Symbol == this._toto.TileAt(2, 1)!.Symbol &&
+      this._toto.TileAt(2, 2)!.Symbol == this._toto.TileAt(2, 1)!.Symbol
+    );
   }
 }
 
