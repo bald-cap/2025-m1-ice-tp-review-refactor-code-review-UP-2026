@@ -7,124 +7,124 @@ const firstColumn = 0;
 const secondColumn = 1;
 const thirdColumn = 2;
 
-const playerO = "O";
-const emptyPlay = " ";
+const markO = "O";
+const emptyMark = " ";
 
 export class Game {
-  private _lastSymbol = emptyPlay;
-  private _board: Board = new Board();
+  private _lastPlayedMark= emptyMark;
+  private _Grid: Grid = new Grid();
 
-  public Play(symbol: string, x: number, y: number): void {
-    this.validateFirstMove(symbol);
-    this.validatePlayer(symbol);
-    this.validatePositionIsEmpty(x, y);
+  public Play(mark: string, x: number, y: number): void {
+    this.validateFirstMove(mark);
+    this.validatePlayerTurn(mark);
+    this.validateSpaceIsEmpty(x, y);
 
-    this.updateLastPlayer(symbol);
-    this.updateBoard(symbol, x, y);
+    this.updateLastPlayedMark(mark);
+    this.updateGrid(mark, x, y);
   }
 
   private validateFirstMove(player: string) {
-    if (this._lastSymbol == emptyPlay) {
-      if (player == playerO) {
+    if (this._lastPlayedMark == emptyMark) {
+      if (player == markO) {
         throw new Error("Invalid first player");
       }
     }
   }
 
-  private validatePlayer(player: string) {
-    if (player == this._lastSymbol) {
+  private validatePlayerTurn(player: string) {
+    if (player == this._lastPlayedMark) {
       throw new Error("Invalid next player");
     }
   }
 
-  private validatePositionIsEmpty(x: number, y: number) {
-    if (this._board.TileAt(x, y).isNotEmpty) {
+  private validateSpaceIsEmpty(x: number, y: number) {
+    if (this._Grid.TileAt(x, y).isNotEmpty) {
       throw new Error("Invalid position");
     }
   }
 
-  private updateLastPlayer(player: string) {
-    this._lastSymbol = player;
+  private updateLastPlayedMark(player: string) {
+    this._lastPlayedMark = player;
   }
 
-  private updateBoard(player: string, x: number, y: number) {
-    this._board.AddTileAt(player, x, y);
+  private updateGrid(player: string, x: number, y: number) {
+    this._Grid.AddTileAt(player, x, y);
   }
 
   public Winner(): string {
-    return this._board.findRowFullWithSamePlayer();
+    return this._Grid.findRowFullWithSameMark();
   }
 }
 
 class Tile {
   private x: number = 0;
   private y: number = 0;
-  private symbol: string = " ";
+  private mark: string = " ";
 
-  constructor(x: number, y: number, symbol: string) {
+  constructor(x: number, y: number, mark: string) {
     this.x = x;
     this.y = y;
-    this.symbol = symbol;
+    this.mark = mark;
   }
 
-  get Symbol() {
-    return this.symbol;
+  get Mark() {
+    return this.mark;
   }
 
   get isNotEmpty() {
-    return this.Symbol !== emptyPlay;
+    return this.Mark !== emptyMark;
   }
 
-  hasSameSymbolAs(other: Tile) {
-    return this.Symbol === other.Symbol;
+  hasSameMarkAs(other: Tile) {
+    return this.Mark === other.Mark;
   }
 
-  hasSameCoordinatesAs(other: Tile) {
+  hasSamePositionsAs(other: Tile) {
     return this.x == other.x && this.y == other.y;
   }
 
-  updateSymbol(newSymbol: string) {
-    this.symbol = newSymbol;
+  updateMark(newMark: string) {
+    this.mark = newMark;
   }
 }
 
-class Board {
+class Grid {
   private _plays: Tile[] = [];
 
   constructor() {
     for (let x = firstRow; x <= thirdRow; x++) {
       for (let y = firstColumn; y <= thirdColumn; y++) {
-        this._plays.push(new Tile(x, y, emptyPlay));
+        this._plays.push(new Tile(x, y, emptyMark));
       }
     }
   }
 
   public TileAt(x: number, y: number): Tile {
     return this._plays.find((t: Tile) =>
-      t.hasSameCoordinatesAs(new Tile(x, y, emptyPlay)),
+      t.hasSamePositionsAs(new Tile(x, y, emptyMark)),
     )!;
   }
 
-  public AddTileAt(symbol: string, x: number, y: number): void {
+  public AddTileAt(mark: string, x: number, y: number): void {
     this._plays
-      .find((t: Tile) => t.hasSameCoordinatesAs(new Tile(x, y, symbol)))!
-      .updateSymbol(symbol);
+      .find((t: Tile) => t.hasSamePositionsAs(new Tile(x, y, mark)))!
+      .updateMark(mark);
   }
 
-  public findRowFullWithSamePlayer(): string {
-    if (this.isRowFull(firstRow) && this.isRowFullWithSameSymbol(firstRow)) {
-      return this.TileAt(firstRow, firstColumn)!.Symbol;
+  public findRowFullWithSameMark(): string {
+    if (this.isRowFull(firstRow) && this.isRowFullWithSameMark(firstRow)) {
+      return this.TileAt(firstRow, firstColumn)!.Mark;
     }
 
-    if (this.isRowFull(secondRow) && this.isRowFullWithSameSymbol(secondRow)) {
-      return this.TileAt(secondRow, firstColumn)!.Symbol;
+    if (this.isRowFull(secondRow) && this.isRowFullWithSameMark(secondRow)) {
+      return this.TileAt(secondRow, firstColumn)!.Mark;
     }
 
-    if (this.isRowFull(thirdRow) && this.isRowFullWithSameSymbol(thirdRow)) {
-      return this.TileAt(thirdRow, firstColumn)!.Symbol;
+    if (this.isRowFull(thirdRow) && this.isRowFullWithSameMark(thirdRow)) {
+      return this.TileAt(thirdRow, firstColumn)!.Mark;
     }
 
-    return emptyPlay;
+    return emptyMark;
   }
 
   private isRowFull(row: number) {
@@ -135,12 +135,12 @@ class Board {
     );
   }
 
-  private isRowFullWithSameSymbol(row: number) {
+  private isRowFullWithSameMark(row: number) {
     return (
-      this.TileAt(row, firstColumn)!.hasSameSymbolAs(
+      this.TileAt(row, firstColumn)!.hasSameMarkAs(
         this.TileAt(row, secondColumn)!,
       ) &&
-      this.TileAt(row, thirdColumn)!.hasSameSymbolAs(
+      this.TileAt(row, thirdColumn)!.hasSameMarkAs(
         this.TileAt(row, secondColumn)!,
       )
     );
