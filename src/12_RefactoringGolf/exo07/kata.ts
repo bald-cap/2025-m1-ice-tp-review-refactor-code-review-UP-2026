@@ -75,12 +75,17 @@ class Tile {
     return this.Player !== noPlayer;
   }
 
+  get Coordinates() {
+    return {x : this.x, y : this.y}
+  }
+
+
   hasSamePlayerAs(other: Tile) {
     return this.Player === other.Player;
   }
 
   hasSameCoordinatesAs(other: Tile) {
-    return this.x == other.x && this.y == other.y;
+    return this.x == other.Coordinates.x && this.y == other.Coordinates.y;
   }
 
   updatePlayer(newPlayer: string) {
