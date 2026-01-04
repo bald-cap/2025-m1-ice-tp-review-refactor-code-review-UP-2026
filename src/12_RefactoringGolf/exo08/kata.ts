@@ -10,6 +10,9 @@ const thirdColumn = 2;
 const playerO = "O";
 const noPlayer = " ";
 
+type Symbol = "X" | "O" | " ";
+type Coordinate = 0 | 1 | 2;
+
 export class Game {
   private _lastPlayer = noPlayer;
   private _board: Board = new Board();
