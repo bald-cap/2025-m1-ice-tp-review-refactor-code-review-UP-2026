@@ -105,9 +105,7 @@ class Board {
   }
 
   public isTilePlayedAt(x: number, y: number) {
-    return this._plays.find((t: Tile) =>
-      t.hasSameCoordinatesAs(new Tile(x, y, noPlayer)),
-    )!.isNotEmpty;
+    return this.TileAt(x, y)!.isNotEmpty;
   }
 
   public AddTileAt(tile: Tile): void {
@@ -132,8 +130,8 @@ class Board {
     return noPlayer;
   }
 
-  private hasSamePlayer(x: number, y: number, otherX: number, otherY: number) {
-    return this.TileAt(x, y)!.hasSamePlayerAs(this.TileAt(otherX, otherY)!);
+  private hasSamePlayer(x: number, y: number, otherY: number) {
+    return this.TileAt(x, y)!.hasSamePlayerAs(this.TileAt(x, otherY)!);
   }
 
   private playerAt(x: number, y: number) {
@@ -156,8 +154,8 @@ class Board {
 
   private isRowFullWithSamePlayer(row: number) {
     return (
-      this.hasSamePlayer(row, firstColumn, row, secondColumn) &&
-      this.hasSamePlayer(row, secondColumn, row, thirdColumn)
+      this.hasSamePlayer(row, firstColumn, secondColumn) &&
+      this.hasSamePlayer(row, secondColumn, thirdColumn)
     );
   }
 }
