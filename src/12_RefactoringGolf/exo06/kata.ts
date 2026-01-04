@@ -38,7 +38,7 @@ export class Game {
   }
 
   private validateSpaceIsEmpty(x: number, y: number) {
-    if (this._Grid.TileAt(x, y).isNotEmpty) {
+    if (this._Grid.SpaceAt(x, y).isNotEmpty) {
       throw new Error("Invalid position");
     }
   }
@@ -48,7 +48,7 @@ export class Game {
   }
 
   private updateGrid(player: string, x: number, y: number) {
-    this._Grid.AddTileAt(player, x, y);
+    this._Grid.AddSpaceAt(player, x, y);
   }
 
   public Winner(): string {
@@ -56,7 +56,7 @@ export class Game {
   }
 }
 
-class Tile {
+class Space {
   private x: number = 0;
   private y: number = 0;
   private mark: string = " ";
@@ -75,11 +75,11 @@ class Tile {
     return this.Mark !== emptyMark;
   }
 
-  hasSameMarkAs(other: Tile) {
+  hasSameMarkAs(other: Space) {
     return this.Mark === other.Mark;
   }
 
-  hasSamePositionsAs(other: Tile) {
+  hasSamePositionsAs(other: Space) {
     return this.x == other.x && this.y == other.y;
   }
 
@@ -89,39 +89,39 @@ class Tile {
 }
 
 class Grid {
-  private _plays: Tile[] = [];
+  private _plays: Space[] = [];
 
   constructor() {
     for (let x = firstRow; x <= thirdRow; x++) {
       for (let y = firstColumn; y <= thirdColumn; y++) {
-        this._plays.push(new Tile(x, y, emptyMark));
+        this._plays.push(new Space(x, y, emptyMark));
       }
     }
   }
 
-  public TileAt(x: number, y: number): Tile {
-    return this._plays.find((t: Tile) =>
-      t.hasSamePositionsAs(new Tile(x, y, emptyMark)),
+  public SpaceAt(x: number, y: number): Space {
+    return this._plays.find((t: Space) =>
+      t.hasSamePositionsAs(new Space(x, y, emptyMark)),
     )!;
   }
 
-  public AddTileAt(mark: string, x: number, y: number): void {
+  public AddSpaceAt(mark: string, x: number, y: number): void {
     this._plays
-      .find((t: Tile) => t.hasSamePositionsAs(new Tile(x, y, mark)))!
+      .find((t: Space) => t.hasSamePositionsAs(new Space(x, y, mark)))!
       .updateMark(mark);
   }
 
   public findRowFullWithSameMark(): string {
     if (this.isRowFull(firstRow) && this.isRowFullWithSameMark(firstRow)) {
-      return this.TileAt(firstRow, firstColumn)!.Mark;
+      return this.SpaceAt(firstRow, firstColumn)!.Mark;
     }
 
     if (this.isRowFull(secondRow) && this.isRowFullWithSameMark(secondRow)) {
-      return this.TileAt(secondRow, firstColumn)!.Mark;
+      return this.SpaceAt(secondRow, firstColumn)!.Mark;
     }
 
     if (this.isRowFull(thirdRow) && this.isRowFullWithSameMark(thirdRow)) {
-      return this.TileAt(thirdRow, firstColumn)!.Mark;
+      return this.SpaceAt(thirdRow, firstColumn)!.Mark;
     }
 
     return emptyMark;
@@ -129,19 +129,19 @@ class Grid {
 
   private isRowFull(row: number) {
     return (
-      this.TileAt(row, firstColumn)!.isNotEmpty &&
-      this.TileAt(row, secondColumn)!.isNotEmpty &&
-      this.TileAt(row, thirdColumn)!.isNotEmpty
+      this.SpaceAt(row, firstColumn)!.isNotEmpty &&
+      this.SpaceAt(row, secondColumn)!.isNotEmpty &&
+      this.SpaceAt(row, thirdColumn)!.isNotEmpty
     );
   }
 
   private isRowFullWithSameMark(row: number) {
     return (
-      this.TileAt(row, firstColumn)!.hasSameMarkAs(
-        this.TileAt(row, secondColumn)!,
+      this.SpaceAt(row, firstColumn)!.hasSameMarkAs(
+        this.SpaceAt(row, secondColumn)!,
       ) &&
-      this.TileAt(row, thirdColumn)!.hasSameMarkAs(
-        this.TileAt(row, secondColumn)!,
+      this.SpaceAt(row, thirdColumn)!.hasSameMarkAs(
+        this.SpaceAt(row, secondColumn)!,
       )
     );
   }
