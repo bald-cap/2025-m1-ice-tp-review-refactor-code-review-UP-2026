@@ -15,40 +15,41 @@ export class Game {
   private _board: Board = new Board();
 
   public Play(player: string, x: number, y: number): void {
-    this.validateFirstMove(player);
-    this.validatePlayer(player);
-    this.validatePositionIsEmpty(x, y);
+    const tile = new Tile(x, y, player)
+    this.validateFirstMove(tile);
+    this.validatePlayer(tile);
+    this.validatePositionIsEmpty(tile);
 
-    this.updateLastPlayer(player);
-    this.updateBoard(player, x, y);
+    this.updateLastPlayer(tile);
+    this.updateBoard(tile);
   }
 
-  private validateFirstMove(player: string) {
+  private validateFirstMove(tile: Tile) {
     if (this._lastPlayer == noPlayer) {
-      if (player == playerO) {
+      if (tile.Player == playerO) {
         throw new Error("Invalid first player");
       }
     }
   }
 
-  private validatePlayer(player: string) {
-    if (player == this._lastPlayer) {
+  private validatePlayer(tile: Tile) {
+    if (tile.Player == this._lastPlayer) {
       throw new Error("Invalid next player");
     }
   }
 
-  private validatePositionIsEmpty(x: number, y: number) {
-    if (this._board.isTilePlayedAt(x, y)) {
+  private validatePositionIsEmpty(tile : Tile) {
+    if (this._board.isTilePlayedAt(tile.Coordinates.x, tile.Coordinates.y)) {
       throw new Error("Invalid position");
     }
   }
 
-  private updateLastPlayer(player: string) {
-    this._lastPlayer = player;
+  private updateLastPlayer(tile: Tile) {
+    this._lastPlayer = tile.Player;
   }
 
-  private updateBoard(player: string, x: number, y: number) {
-    this._board.AddTileAt(new Tile(x, y, player));
+  private updateBoard(tile : Tile) {
+    this._board.AddTileAt(tile);
   }
 
   public Winner(): string {
@@ -79,13 +80,12 @@ class Tile {
     return {x : this.x, y : this.y}
   }
 
-
   hasSamePlayerAs(other: Tile) {
     return this.Player === other.Player;
   }
 
   hasSameCoordinatesAs(other: Tile) {
-    return this.x == other.Coordinates.x && this.y == other.Coordinates.y;
+    return this.x == other.Coordinates.x && this.y == other.y;
   }
 
   updatePlayer(newPlayer: string) {
